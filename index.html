@@ -1,524 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>PyleaMUN Delegate Allocations</title>
-  <style>
-    /* --- SCREEN STYLES --- */
-    :root {
-      --bg: #E8EAE6;
-      --paper: #fff;
-      --ink: #333;
-      --brand: #005b63;
-      --accent: #00b4a0;
-      --alert: #d32f2f;
-    }
-    body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+<meta charset="UTF-8">
+<title>PyleaMUN Delegate Allocations</title>
+<style>
+    :root { --bg: #ffffff; --ink: #000; --brand: #005b63; --accent: #00b4a0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: white; color: black; }
     
-    .letterhead { display:flex; justify-content:space-between; align-items:center; background-color:#D6DBD2; border-bottom:2px solid #444; padding:10px 20px; min-height:100px; }
-    .address, .contact { width:30%; font-size:0.9rem; }
-    .contact { display:flex; flex-direction:column; align-items:flex-end; }
-    .logo-container { width:120px; text-align:center; }
-    .logo { width:120px; height:auto; display:block; mix-blend-mode: multiply; }
+    .letterhead { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #444; padding: 10px 40px; margin-bottom: 20px; }
+    .logo { width: 120px; height: auto; mix-blend-mode: multiply; }
+    .address, .contact { font-size: 0.9rem; }
+    .contact { text-align: right; }
     
-    h1 { text-align: center; color: var(--brand); margin: 30px 0; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 20px; padding-bottom: 60px; }
+    h1 { text-align: center; color: var(--brand); margin: 20px 0; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px 20px; }
     
-    .committee-section { background: #fff; padding: 20px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .committee-section { margin-bottom: 40px; page-break-inside: avoid; }
     .committee-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 15px; }
-    h3 { color: var(--brand); margin: 0; }
+    h3 { margin: 0; color: var(--brand); font-size: 1.4rem; }
     
-    table { width: 100%; border-collapse: collapse; }
-    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 0.95rem; }
-    th { background-color: var(--brand); color: white; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+    th { background-color: var(--brand); color: white; font-weight: 600; }
     tr:nth-child(even) { background-color: #f9f9f9; }
+    
+    /* Number column */
+    th:first-child, td:first-child { width: 40px; text-align: center; }
 
-    /* Number Column Style */
-    th:first-child, td:first-child { width: 40px; text-align: center; font-weight: bold; color: #555; }
-    th:first-child { color: white; }
+    .print-btn { background: #444; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+    .print-btn:hover { background: var(--brand); }
 
-    .print-btn {
-      background-color: #444;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: background 0.2s;
-    }
-    .print-btn:hover { background-color: var(--brand); }
+    .footer { text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid #ccc; font-size: 0.9rem; color: #555; }
 
-    .footer {
-        text-align: center;
-        margin-top: 50px;
-        padding: 20px;
-        color: #555;
-        font-size: 0.9rem;
-        border-top: 1px solid #ccc;
-    }
-
-    /* --- PRINT STYLES --- */
     @media print {
-      body, html { margin: 0; padding: 0; background: white; width: 100%; }
-      body > *:not(#print-area) { display: none !important; }
-      #print-area { display: block !important; position: absolute; top: 0; left: 0; width: 100%; background: white; }
-      
-      .committee-section { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0 !important; }
-      .committee-header { border-bottom: 1px solid #000; margin-bottom: 15px; }
-      .print-btn { display: none !important; }
-      
-      table { border: 1px solid #000; width: 100%; border-collapse: collapse; }
-      th { background-color: white !important; color: black !important; border: 1px solid #000; font-weight: bold; }
-      td { border: 1px solid #000; color: black !important; }
-      tr:nth-child(even) { background-color: white !important; }
-      
-      .letterhead { background-color: white !important; border-bottom: 1px solid #000; color: black !important; margin-bottom: 20px; }
-      .footer { position: fixed; bottom: 0; width: 100%; border: none; background: white; color: black !important; }
+        @page { margin: 1cm; size: A4; }
+        body { background: white; -webkit-print-color-adjust: exact; }
+        
+        /* Hide everything not in print area */
+        body > *:not(#print-area) { display: none !important; }
+        #print-area { display: block !important; position: absolute; top: 0; left: 0; width: 100%; }
+        
+        .letterhead { border-bottom: 1px solid #000; margin-bottom: 10px; padding: 10px 0; }
+        .committee-section { page-break-inside: auto; }
+        .committee-header { border-bottom: 1px solid #000; }
+        .print-btn { display: none !important; }
+        
+        table { border: 1px solid #000; page-break-inside: auto; }
+        tr { page-break-inside: avoid; page-break-after: auto; }
+        th { background-color: white !important; color: black !important; border: 1px solid #000; }
+        td { border: 1px solid #000; color: black !important; }
+        tr:nth-child(even) { background-color: white !important; }
+        
+        .footer { position: fixed; bottom: 0; width: 100%; background: white; color: black; border-top: 1px solid #000; padding: 10px 0; }
     }
-  </style>
-  <script>
-    function printCommittee(committeeId) {
-      var committeeContent = document.getElementById(committeeId).innerHTML;
-      var headerContent = document.querySelector('.letterhead').outerHTML;
-      var footerContent = document.querySelector('.footer').outerHTML;
-      var printArea = document.createElement('div');
-      printArea.id = 'print-area';
-      printArea.innerHTML = headerContent + 
-                            '<div style="padding: 20px; margin-bottom: 50px;">' + 
-                              '<div class="committee-section">' + committeeContent + '</div>' + 
-                            '</div>' + 
-                            footerContent;
-      document.body.appendChild(printArea);
-      window.print();
-      document.body.removeChild(printArea);
-    }
-  </script>
+</style>
+<script>
+function printCommittee(id) {
+    var content = document.getElementById(id).innerHTML;
+    var head = document.querySelector('.letterhead').outerHTML;
+    var foot = document.querySelector('.footer').outerHTML;
+    var printDiv = document.createElement('div');
+    printDiv.id = 'print-area';
+    printDiv.innerHTML = head + '<div class="container" style="padding-bottom:50px">' + content + '</div>' + foot;
+    document.body.appendChild(printDiv);
+    window.print();
+    document.body.removeChild(printDiv);
+}
+</script>
 </head>
 <body>
 
-  <div class="letterhead">
+<div class="letterhead">
     <div class="address">
-      <p><strong>PyleaMUN Organization</strong><br>
-      1st Senior High School of Pylea<br>
-      Thessaloniki, Greece</p>
+        <strong>PyleaMUN Organization</strong><br>
+        1st Senior High School of Pylea<br>
+        Thessaloniki, Greece
     </div>
     <div class="logo-container">
-      <img src="logo.png" alt="PyleaMUN Logo" class="logo">
+        <img src="logo.png" alt="PyleaMUN Logo" class="logo">
     </div>
     <div class="contact">
-      <p><strong>Contact Us</strong><br>
-      Email: pyleamun@gmail.com</p>
+        <strong>Contact Us</strong><br>
+        Email: pyleamun@gmail.com
     </div>
-  </div>
+</div>
 
-  <div class="header">
+<div class="header">
     <h1>Delegate Allocations by Committee</h1>
-  </div>
+</div>
 
-  <div class="container">
+<div class="container">
 
     <div id="com-0" class="committee-section">
-      <div class="committee-header">
-        <h3>Economic & Social Council (30)</h3>
-        <button class="print-btn" onclick="printCommittee('com-0')">Print to PDF</button>
-      </div>
-      <table>
-        <thead><tr><th>#</th><th>Country</th><th>Name of Delegate</th><th>School of Origin</th><th>Advisor(s)</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Argentina</td><td>Dimitrios Xakis</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>2</td><td>Australia</td><td>Konstantinos Tsalis</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>3</td><td>Austria</td><td>Dimitropoulou Elpida</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>4</td><td>Belarus</td><td>Boulaki Nicol</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>5</td><td>Czech Republic</td><td>Kaminari Gerasimina</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>6</td><td>Egypt</td><td>Ioannis Pechlivanis</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr>
-          <tr><td>7</td><td>Finland</td><td>Skandali  Marilia</td><td>6th Senior High School of Kalamaria</td><td>Eleni Kalogianni</td></tr>
-          <tr><td>8</td><td>France</td><td>Papaspyridakos Symeon</td><td>1st Middle School of Pylea</td><td>Anastasia Tsioumani, Paschalia Gkoutziamani, Thomas Gkoutziamanis</td></tr>
-          <tr><td>9</td><td>Germany</td><td>Maria Tsatsoua</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>10</td><td>Hungary</td><td>Bakirtsaki Eleni</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>11</td><td>Iceland</td><td>Tsimponis Georgios Taxiarchis</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>12</td><td>India</td><td>Chrysoula Vakou</td><td>Model Vocational High School of Epanomi</td><td>Kiriaki Koulia</td></tr>
-          <tr><td>13</td><td>Ireland</td><td>Politis Loukas</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>14</td><td>Italy</td><td>Pavlo Pano</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>15</td><td>Japan</td><td>Maria Kogkoli</td><td>American Farm School</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>16</td><td>Latvia</td><td>Ampatzidis Georgios</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli</td></tr>
-          <tr><td>17</td><td>Malta</td><td>Chatzispirou Eleni</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>18</td><td>Mexico</td><td>Fountoulakis Georgios</td><td>1st Middle School of Pylea</td><td>Anastasia Tsioumani, Paschalia Gkoutziamani, Thomas Gkoutziamanis</td></tr>
-          <tr><td>19</td><td>Norway</td><td>Bouziani Antigoni</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr>
-          <tr><td>20</td><td>Portugal</td><td>Vasiliki-Irene Nouri</td><td>Junior High School of Macrochori</td><td>Mina Koulouri</td></tr>
-          <tr><td>21</td><td>Qatar</td><td>Thomai Argyropoulou</td><td>3rd Junior High School of Thessaloniki</td><td>Kyriakopoulou Eirini</td></tr>
-          <tr><td>22</td><td>Romania</td><td>Forozidis Aristidis</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara</td></tr>
-          <tr><td>23</td><td>Russia</td><td>Papadopoulou Vassiliki</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>24</td><td>South Africa</td><td>Dimitra Anyparidou</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>25</td><td>Sweden</td><td>Tsemperidis Ioannis</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>26</td><td>Switzerland</td><td>Despoina Theodoridou</td><td>3rd Junior High School of Kalamaria</td><td>Aikaterini Gkintziri</td></tr>
-          <tr><td>27</td><td>The Netherlands</td><td>Tsiakiris Nikolaos</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>28</td><td>USA</td><td>Ioannidis Theodoros</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr>
-          <tr><td>29</td><td>Ukraine</td><td>Bataoula Konstantina</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>30</td><td>United Arab Emirates</td><td>Dimitrios Papadopoulos</td><td>17th Senior High School of Thessaloniki</td><td>Efthymia Damtsi, Georgia Douramani</td></tr>
-        </tbody>
-      </table>
+        <div class="committee-header">
+            <h3>Economic & Social Council (29)</h3>
+            <button class="print-btn" onclick="printCommittee('com-0')">Print to PDF</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Country</th>
+                    <th>Name of Delegate</th>
+                    <th>School of Origin</th>
+                    <th>Advisor(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr><td>1</td><td>Argentina</td><td>Dimitrios Xakis</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>2</td><td>Australia</td><td>Konstantinos Tsalis</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>3</td><td>Austria</td><td>Dimitropoulou Elpida</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>4</td><td>Belarus</td><td>Boulaki Nicol</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>5</td><td>Czech Republic</td><td>Kaminari Gerasimina</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>6</td><td>Egypt</td><td>Ioannis Pechlivanis</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr><tr><td>7</td><td>Finland</td><td>Skandali  Marilia</td><td>6th Senior High School of Kalamaria</td><td>Angeliki Maria Economopoulou </td></tr><tr><td>8</td><td>France</td><td>Papaspyridakos Symeon</td><td>1st Middle School of Pylea</td><td>Fani Vasilikou, Lemonia Dimina, Panagiotis Domvros</td></tr><tr><td>9</td><td>Germany</td><td>Maria Tsatsoua</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>10</td><td>Hungary</td><td>Bakirtsaki Eleni</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>11</td><td>Iceland</td><td>Tsimponis Georgios Taxiarchis</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>12</td><td>India</td><td>Chrysoula Vakou</td><td>Model Vocational High School of Epanomi</td><td>Evangelia Tsipropoulou </td></tr><tr><td>13</td><td>Ireland</td><td>Politis Loukas</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>14</td><td>Italy</td><td>Pavlo Pano</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>15</td><td>Japan</td><td>Maria Kogkoli</td><td>American Farm School</td><td>Dorothy Chrisohoidis (Senior High School) </td></tr><tr><td>16</td><td>Latvia</td><td>Ampatzidis Georgios</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli </td></tr><tr><td>17</td><td>Malta</td><td>Chatzispirou Eleni</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>18</td><td>Mexico</td><td>Fountoulakis Georgios</td><td>1st Middle School of Pylea</td><td>Fani Vasilikou, Lemonia Dimina, Panagiotis Domvros</td></tr><tr><td>19</td><td>Norway</td><td>Bouziani Antigoni</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr><tr><td>20</td><td>Portugal</td><td>Vasiliki-Irene Nouri</td><td>Junior High School of Macrochori</td><td>Zarifi Vasoglou, Maria Apostolou</td></tr><tr><td>21</td><td>Qatar</td><td>Thomai Argyropoulou</td><td>3rd Junior High School of Thessaloniki</td><td>Vasiliki Michailidou</td></tr><tr><td>22</td><td>Russia</td><td>Papadopoulou Vassiliki</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>23</td><td>South Africa</td><td>Dimitra Anyparidou</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>24</td><td>Sweden</td><td>Tsemperidis Ioannis</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>25</td><td>Switzerland</td><td>Despoina Theodoridou</td><td>3rd Junior High School of Kalamaria</td><td>Pougaridou Eleni</td></tr><tr><td>26</td><td>The Netherlands</td><td>Tsiakiris Nikolaos</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>27</td><td>USA</td><td>Ioannidis Theodoros</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr><tr><td>28</td><td>Ukraine</td><td>Bataoula Konstantina</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>29</td><td>United Arab Emirates</td><td>Dimitrios Papadopoulos</td><td>17th Senior High School of Thessaloniki</td><td>Efthymia Damtsi, Georgia Douramani</td></tr>            </tbody>
+        </table>
     </div>
-
+    
     <div id="com-1" class="committee-section">
-      <div class="committee-header">
-        <h3>Historical Crisis Committee (17)</h3>
-        <button class="print-btn" onclick="printCommittee('com-1')">Print to PDF</button>
-      </div>
-      <table>
-        <thead><tr><th>#</th><th>Country</th><th>Name of Delegate</th><th>School of Origin</th><th>Advisor(s)</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Byzantium</td><td>Giotakis Fineas</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>2</td><td>The Acarnanian League</td><td>Giotakis Aris</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>3</td><td>The Arcadian League</td><td>Vasilis Papaspiridakos</td><td>1st Senior High School of Pylea</td><td>Katerina Lymperi</td></tr>
-          <tr><td>4</td><td>The City State of Argos</td><td>Stamatogiannis Georgios</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr>
-          <tr><td>5</td><td>The City State of Athens</td><td>Charalampos Kolliniatis</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Foteini Skentzou, Theodora Kalliora</td></tr>
-          <tr><td>6</td><td>The City State of Corcyra</td><td>Kristina Thomo</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>7</td><td>The City State of Corinth</td><td>Laftsidis Georgios</td><td>1st Middle School of Pylea</td><td>Anastasia Tsioumani, Paschalia Gkoutziamani, Thomas Gkoutziamanis</td></tr>
-          <tr><td>8</td><td>The City State of Elis</td><td>Ilias Pipilakidis</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>9</td><td>The City State of Epidaurus</td><td>Vasiliadi Andriana</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara</td></tr>
-          <tr><td>10</td><td>The City State of Euboea</td><td>Elena Ntourou</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>11</td><td>The City State of Locris</td><td>Kourkoutas Charalampos</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli</td></tr>
-          <tr><td>12</td><td>The City State of Megara</td><td>Galanopoulou Diamantenia</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli</td></tr>
-          <tr><td>13</td><td>The City State of Perintus, Thracian Peninsula</td><td>Eleftherios Christos Mourmouras</td><td>Model Vocational High School of Epanomi</td><td>Kiriaki Koulia</td></tr>
-          <tr><td>14</td><td>The City State of Rhodes</td><td>Maria Pana</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>15</td><td>The City State of The Aetolian League</td><td>Giannopoulos Vasileios Rafail</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr>
-          <tr><td>16</td><td>The City State of Thebes</td><td>Sampanis Dimitrios</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Foteini Skentzou, Theodora Kalliora</td></tr>
-          <tr><td>17</td><td>The Thessalian League</td><td>Anthoulakis Nikolaos</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-        </tbody>
-      </table>
+        <div class="committee-header">
+            <h3>Historical Crisis Committee (17)</h3>
+            <button class="print-btn" onclick="printCommittee('com-1')">Print to PDF</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Country</th>
+                    <th>Name of Delegate</th>
+                    <th>School of Origin</th>
+                    <th>Advisor(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr><td>1</td><td>Byzantium</td><td>Giotakis Fineas</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>2</td><td>The Acarnanian League</td><td>Giotakis Aris</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>3</td><td>The Arcadian League</td><td>Vasilis Papaspiridakos</td><td>1st Senior High School of Pylea</td><td>Foteini Papagermanou, Marina Moschovidou</td></tr><tr><td>4</td><td>The City State of Argos</td><td>Stamatogiannis Georgios</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr><tr><td>5</td><td>The City State of Athens</td><td>Charalampos Kolliniatis</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Skentzou Foteini , Theodora Kalliora</td></tr><tr><td>6</td><td>The City State of Corcyra</td><td>Kristina Thomo</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>7</td><td>The City State of Corinth</td><td>Laftsidis Georgios</td><td>1st Middle School of Pylea</td><td>Fani Vasilikou, Lemonia Dimina, Panagiotis Domvros</td></tr><tr><td>8</td><td>The City State of Elis</td><td>Ilias Pipilakidis</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>9</td><td>The City State of Epidaurus</td><td>Vasiliadi Andriana</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara, Christina Bitsiou</td></tr><tr><td>10</td><td>The City State of Euboea</td><td>Elena Ntourou</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>11</td><td>The City State of Locris</td><td>Kourkoutas Charalampos</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli </td></tr><tr><td>12</td><td>The City State of Megara</td><td>Galanopoulou Diamantenia</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli </td></tr><tr><td>13</td><td>The City State of Perintus, Thracian Peninsula</td><td>Eleftherios Christos Mourmouras</td><td>Model Vocational High School of Epanomi</td><td>Evangelia Tsipropoulou </td></tr><tr><td>14</td><td>The City State of Rhodes</td><td>Maria Pana</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>15</td><td>The City State of The Aetolian League</td><td>Giannopoulos Vasileios Rafail</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr><tr><td>16</td><td>The City State of Thebes</td><td>Sampanis Dimitrios</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Skentzou Foteini , Theodora Kalliora</td></tr><tr><td>17</td><td>The Thessalian League</td><td>Anthoulakis Nikolaos</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr>            </tbody>
+        </table>
     </div>
-
+    
     <div id="com-2" class="committee-section">
-      <div class="committee-header">
-        <h3>Human Rights Council (36)</h3>
-        <button class="print-btn" onclick="printCommittee('com-2')">Print to PDF</button>
-      </div>
-      <table>
-        <thead><tr><th>#</th><th>Country</th><th>Name of Delegate</th><th>School of Origin</th><th>Advisor(s)</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Argentina</td><td>Anastasia Tzinoria</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>2</td><td>Armenia</td><td>Tsirogianni Anastasia</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>3</td><td>Australia</td><td>Marina Kavvadia</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>4</td><td>Austria</td><td>Togias Evangelos</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>5</td><td>Belarus</td><td>Siouta Iliani Anna</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>6</td><td>Czech Republic</td><td>Charalampidi Dionysia</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>7</td><td>Egypt</td><td>Natsi Fotini</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr>
-          <tr><td>8</td><td>Finland</td><td>Papanikolaou Iliana Eirini</td><td>6th Senior High School of Kalamaria</td><td>Eleni Kalogianni</td></tr>
-          <tr><td>9</td><td>France</td><td>Madi Olivia</td><td>1st Middle School of Pylea</td><td>Anastasia Tsioumani, Paschalia Gkoutziamani, Thomas Gkoutziamanis</td></tr>
-          <tr><td>10</td><td>Germany</td><td>Aikaterini Raikou</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>11</td><td>Greece</td><td>Charitini Papaiordanidou</td><td>Junior High School of Chortiatis</td><td>Independent Delegate (Panagiotis Domvros)</td></tr>
-          <tr><td>12</td><td>Hungary</td><td>Athanasiou Georgios</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>13</td><td>Iceland</td><td>Dimitris Simintzis</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>14</td><td>India</td><td>Georgia Ammanatidou</td><td>Model Vocational High School of Epanomi</td><td>Kiriaki Koulia</td></tr>
-          <tr><td>15</td><td>Ireland</td><td>Markatou Agni</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>16</td><td>Italy</td><td>Fiorela Alla</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>17</td><td>Japan</td><td>Prodromos Itsiopoulos</td><td>American Farm School</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>18</td><td>Latvia</td><td>Lytinakis Dimitrios</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli</td></tr>
-          <tr><td>19</td><td>Malta</td><td>Larou Anna</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>20</td><td>New Zealand</td><td>Maria Koukoutara</td><td>Junior High School of Macrochori</td><td>Mina Koulouri</td></tr>
-          <tr><td>21</td><td>Nigeria</td><td>Katerina Sejati</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>22</td><td>North Korea</td><td>Theofania Laska</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Foteini Skentzou, Theodora Kalliora</td></tr>
-          <tr><td>23</td><td>Norway</td><td>Mpekiaroudi Chrysoula</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr>
-          <tr><td>24</td><td>Poland</td><td>Kalliopi Kaliaki</td><td>1st Senior High School of Pylea</td><td>Katerina Lymperi</td></tr>
-          <tr><td>25</td><td>Portugal</td><td>Rafailia Karavangeli</td><td>Junior High School of Macrochori</td><td>Mina Koulouri</td></tr>
-          <tr><td>26</td><td>Qatar</td><td>Sofia Aivazidou</td><td>3rd Junior High School of Thessaloniki</td><td>Kyriakopoulou Eirini</td></tr>
-          <tr><td>27</td><td>Republic of Korea</td><td>Paraskevi Kouskounelou</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Foteini Skentzou, Theodora Kalliora</td></tr>
-          <tr><td>28</td><td>Romania</td><td>Anozidou Nikiti</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara</td></tr>
-          <tr><td>29</td><td>Russia</td><td>Deligianni Ermioni Ioulia</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>30</td><td>South Africa</td><td>Foteini Geragori</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>31</td><td>Sweden</td><td>Mavrogeni Ioanna</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>32</td><td>Switzerland</td><td>Dimitra Chare</td><td>3rd Junior High School of Kalamaria</td><td>Aikaterini Gkintziri</td></tr>
-          <tr><td>33</td><td>The Netherlands</td><td>Babaou Martha</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>34</td><td>Turkey</td><td>Angelo Rama</td><td>Model Vocational High School of Epanomi</td><td>Kiriaki Koulia</td></tr>
-          <tr><td>35</td><td>USA</td><td>Gelashvili Lizi</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr>
-          <tr><td>36</td><td>Ukraine</td><td>Sarafidou Maria</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>37</td><td>United Kingdom</td><td>Anastasia Velaora</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>
-        </tbody>
-      </table>
+        <div class="committee-header">
+            <h3>Human Rights Council (37)</h3>
+            <button class="print-btn" onclick="printCommittee('com-2')">Print to PDF</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Country</th>
+                    <th>Name of Delegate</th>
+                    <th>School of Origin</th>
+                    <th>Advisor(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr><td>1</td><td>Argentina</td><td>Anastasia Tzinoria</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>2</td><td>Armenia</td><td>Tsirogianni Anastasia</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>3</td><td>Australia</td><td>Marina Kavvadia</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>4</td><td>Austria</td><td>Togias Evangelos</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>5</td><td>Belarus</td><td>Siouta Iliani Anna</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>6</td><td>Czech Republic</td><td>Charalampidi Dionysia</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>7</td><td>Egypt</td><td>Natsi Fotini</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr><tr><td>8</td><td>Finland</td><td>Papanikolaou Iliana Eirini</td><td>6th Senior High School of Kalamaria</td><td>Angeliki Maria Economopoulou </td></tr><tr><td>9</td><td>France</td><td>Madi Olivia</td><td>1st Middle School of Pylea</td><td>Fani Vasilikou, Lemonia Dimina, Panagiotis Domvros</td></tr><tr><td>10</td><td>Germany</td><td>Aikaterini Raikou</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>11</td><td>Greece</td><td>Charitini Papaiordanidou</td><td>Junior High School of Chortiatis</td><td>Independent Delegate (Panagiotis Domvros)</td></tr><tr><td>12</td><td>Hungary</td><td>Athanasiou Georgios</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>13</td><td>Iceland</td><td>Dimitris Simintzis</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>14</td><td>India</td><td>Georgia Ammanatidou</td><td>Model Vocational High School of Epanomi</td><td>Evangelia Tsipropoulou </td></tr><tr><td>15</td><td>Ireland</td><td>Markatou Agni</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>16</td><td>Italy</td><td>Fiorela Alla</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>17</td><td>Japan</td><td>Prodromos Itsiopoulos</td><td>American Farm School</td><td>Dorothy Chrisohoidis (Senior High School) </td></tr><tr><td>18</td><td>Latvia</td><td>Lytinakis Dimitrios</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli </td></tr><tr><td>19</td><td>Malta</td><td>Larou Anna</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>20</td><td>New Zealand</td><td>Maria Koukoutara</td><td>Junior High School of Macrochori</td><td>Zarifi Vasoglou, Maria Apostolou</td></tr><tr><td>21</td><td>Nigeria</td><td>Katerina Sejati</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>22</td><td>North Korea</td><td>Theofania Laska</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Skentzou Foteini , Theodora Kalliora</td></tr><tr><td>23</td><td>Norway</td><td>Mpekiaroudi Chrysoula</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr><tr><td>24</td><td>Poland</td><td>Kalliopi Kaliaki</td><td>1st Senior High School of Pylea</td><td>Foteini Papagermanou, Marina Moschovidou</td></tr><tr><td>25</td><td>Portugal</td><td>Rafailia Karavangeli</td><td>Junior High School of Macrochori</td><td>Zarifi Vasoglou, Maria Apostolou</td></tr><tr><td>26</td><td>Qatar</td><td>Sofia Aivazidou</td><td>3rd Junior High School of Thessaloniki</td><td>Vasiliki Michailidou</td></tr><tr><td>27</td><td>Republic of Korea</td><td>Paraskevi Kouskounelou</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Skentzou Foteini , Theodora Kalliora</td></tr><tr><td>28</td><td>Romania</td><td>Anozidou Nikiti</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara, Christina Bitsiou</td></tr><tr><td>29</td><td>Russia</td><td>Deligianni Ermioni Ioulia</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>30</td><td>South Africa</td><td>Foteini Geragori</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>31</td><td>Sweden</td><td>Mavrogeni Ioanna</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>32</td><td>Switzerland</td><td>Dimitra Chare</td><td>3rd Junior High School of Kalamaria</td><td>Pougaridou Eleni</td></tr><tr><td>33</td><td>The Netherlands</td><td>Babaou Martha</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>34</td><td>Turkey</td><td>Angelo Rama</td><td>Model Vocational High School of Epanomi</td><td>Evangelia Tsipropoulou </td></tr><tr><td>35</td><td>USA</td><td>Gelashvili Lizi</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr><tr><td>36</td><td>Ukraine</td><td>Sarafidou Maria</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>37</td><td>United Kingdom</td><td>Anastasia Velaora</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>            </tbody>
+        </table>
     </div>
-
+    
     <div id="com-3" class="committee-section">
-      <div class="committee-header">
-        <h3>NATO (29)</h3>
-        <button class="print-btn" onclick="printCommittee('com-3')">Print to PDF</button>
-      </div>
-      <table>
-        <thead><tr><th>#</th><th>Country</th><th>Name of Delegate</th><th>School of Origin</th><th>Advisor(s)</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Albania</td><td>Isidoros Ximitoudis</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>2</td><td>Bulgaria</td><td>Dimitrios Papakonstantinou</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>3</td><td>Canada</td><td>Kaproulias Angelos</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>4</td><td>China</td><td>Betsas Apostolos</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>5</td><td>Czech Republic</td><td>Trantas Antonios</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>6</td><td>Denmark</td><td>Dimitris Siokis</td><td>Anatolia College IB</td><td>Independent Delegate (Panagiotis Domvros)</td></tr>
-          <tr><td>7</td><td>Estonia</td><td>Panagiotis Basias</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr>
-          <tr><td>8</td><td>Finland</td><td>Fotopoulou Valia</td><td>6th Senior High School of Kalamaria</td><td>Eleni Kalogianni</td></tr>
-          <tr><td>9</td><td>France</td><td>Floros Ioannis</td><td>1st Middle School of Pylea</td><td>Anastasia Tsioumani, Paschalia Gkoutziamani, Thomas Gkoutziamanis</td></tr>
-          <tr><td>10</td><td>Germany</td><td>Thomas Besas</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>11</td><td>Hungary</td><td>Anagnostopoulos Anthimos</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>12</td><td>Iceland</td><td>Zagas Ioannis</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>13</td><td>Ireland</td><td>Nikolaou Konstantinos</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>14</td><td>Italy</td><td>Grigorios Tzoumakis</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>15</td><td>Japan</td><td>Georgia Polymenakou</td><td>American Farm School</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>16</td><td>Latvia</td><td>Liaka Dimitra</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>17</td><td>Montenegro</td><td>Theodoros Schismenos</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>18</td><td>North Macedonia</td><td>Alkiviadis Protogerou</td><td>3rd Junior High School of Kalamaria</td><td>Aikaterini Gkintziri</td></tr>
-          <tr><td>19</td><td>Norway</td><td>Dimitris Santis</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr>
-          <tr><td>20</td><td>Portugal</td><td>Kyriaki Panonidou</td><td>Junior High School of Macrochori</td><td>Mina Koulouri</td></tr>
-          <tr><td>21</td><td>Romania</td><td>Papaioannou Stamatis</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara</td></tr>
-          <tr><td>22</td><td>Saudi Arabia</td><td>Georgiadis Konstantinos</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>23</td><td>Slovakia</td><td>Myrmiliagkou Ioanna</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>24</td><td>Spain</td><td>Milolika Karpova</td><td>American Farm School</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>25</td><td>Sweden</td><td>Taxidis Anastasios</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>26</td><td>The Netherlands</td><td>Papadopoulos Leonidas</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>27</td><td>Turkey</td><td>Christina Arvanitaki</td><td>Model Vocational High School of Epanomi</td><td>Kiriaki Koulia</td></tr>
-          <tr><td>28</td><td>USA</td><td>Charistes Konstantinos</td><td>1st Middle School of Pylea</td><td>Anastasia Tsioumani, Paschalia Gkoutziamani, Thomas Gkoutziamanis</td></tr>
-          <tr><td>29</td><td>United Kingdom</td><td>Petros Papalazarou</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>
-        </tbody>
-      </table>
+        <div class="committee-header">
+            <h3>NATO (29)</h3>
+            <button class="print-btn" onclick="printCommittee('com-3')">Print to PDF</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Country</th>
+                    <th>Name of Delegate</th>
+                    <th>School of Origin</th>
+                    <th>Advisor(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr><td>1</td><td>Albania</td><td>Isidoros Ximitoudis</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>2</td><td>Bulgaria</td><td>Dimitrios Papakonstantinou</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>3</td><td>Canada</td><td>Kaproulias Angelos</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>4</td><td>China</td><td>Betsas Apostolos</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>5</td><td>Czech Republic</td><td>Trantas Antonios</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>6</td><td>Denmark</td><td>Dimitris Siokis</td><td>Anatolia College IB</td><td>Independent Delegate (Panagiotis Domvros)</td></tr><tr><td>7</td><td>Estonia</td><td>Panagiotis Basias</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr><tr><td>8</td><td>Finland</td><td>Fotopoulou Valia</td><td>6th Senior High School of Kalamaria</td><td>Angeliki Maria Economopoulou </td></tr><tr><td>9</td><td>France</td><td>Floros Ioannis</td><td>1st Middle School of Pylea</td><td>Fani Vasilikou, Lemonia Dimina, Panagiotis Domvros</td></tr><tr><td>10</td><td>Germany</td><td>Thomas Besas</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>11</td><td>Hungary</td><td>Anagnostopoulos Anthimos</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>12</td><td>Iceland</td><td>Zagas Ioannis</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>13</td><td>Ireland</td><td>Nikolaou Konstantinos</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>14</td><td>Italy</td><td>Grigorios Tzoumakis</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>15</td><td>Japan</td><td>Georgia Polymenakou</td><td>American Farm School</td><td>Dorothy Chrisohoidis (Senior High School) </td></tr><tr><td>16</td><td>Latvia</td><td>Liaka Dimitra</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>17</td><td>Montenegro</td><td>Theodoros Schismenos</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>18</td><td>North Macedonia</td><td>Alkiviadis Protogerou</td><td>3rd Junior High School of Kalamaria</td><td>Pougaridou Eleni</td></tr><tr><td>19</td><td>Norway</td><td>Dimitris Santis</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr><tr><td>20</td><td>Portugal</td><td>Kyriaki Panonidou</td><td>Junior High School of Macrochori</td><td>Zarifi Vasoglou, Maria Apostolou</td></tr><tr><td>21</td><td>Romania</td><td>Papaioannou Stamatis</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara, Christina Bitsiou</td></tr><tr><td>22</td><td>Saudi Arabia</td><td>Georgiadis Konstantinos</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>23</td><td>Slovakia</td><td>Myrmiliagkou Ioanna</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>24</td><td>Spain</td><td>Milolika Karpova</td><td>American Farm School</td><td>Dorothy Chrisohoidis (Senior High School) </td></tr><tr><td>25</td><td>Sweden</td><td>Taxidis Anastasios</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>26</td><td>The Netherlands</td><td>Papadopoulos Leonidas</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>27</td><td>Turkey</td><td>Christina Arvanitaki</td><td>Model Vocational High School of Epanomi</td><td>Evangelia Tsipropoulou </td></tr><tr><td>28</td><td>USA</td><td>Charistes Konstantinos</td><td>1st Middle School of Pylea</td><td>Fani Vasilikou, Lemonia Dimina, Panagiotis Domvros</td></tr><tr><td>29</td><td>United Kingdom</td><td>Petros Papalazarou</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>            </tbody>
+        </table>
     </div>
-
+    
     <div id="com-4" class="committee-section">
-      <div class="committee-header">
-        <h3>Security Council (38)</h3>
-        <button class="print-btn" onclick="printCommittee('com-4')">Print to PDF</button>
-      </div>
-      <table>
-        <thead><tr><th>#</th><th>Country</th><th>Name of Delegate</th><th>School of Origin</th><th>Advisor(s)</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Argentina</td><td>Aldrin Xhafa</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>2</td><td>Australia</td><td>Thomas Diamantidis</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>3</td><td>Austria</td><td>Theodorelou Aikaterini</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>4</td><td>Belarus</td><td>Kostopoulou Sylvestrou Olga</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>5</td><td>China</td><td>Sdralis Andreas</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>6</td><td>Czech Republic</td><td>Thomopoulou Artemis</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>7</td><td>Denmark</td><td>Achilleas Katsos</td><td>Anatolia College IB</td><td>Independent Delegate (Panagiotis Domvros)</td></tr>
-          <tr><td>8</td><td>Egypt</td><td>Avraam Kontopoulos</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr>
-          <tr><td>9</td><td>Estonia</td><td>Dimitroulakis Konstantinos</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>10</td><td>Finland</td><td>Moutropoulou Apostolia</td><td>6th Senior High School of Kalamaria</td><td>Eleni Kalogianni</td></tr>
-          <tr><td>11</td><td>France</td><td>Christoforidis Konstantinos</td><td>1st Middle School of Pylea</td><td>Anastasia Tsioumani, Paschalia Gkoutziamani, Thomas Gkoutziamanis</td></tr>
-          <tr><td>12</td><td>Germany</td><td>Dimitra Zacharia</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>13</td><td>Greece</td><td>Thanos Mouzakis</td><td>3rd High School of Stavroupoli</td><td>Independent Delegate (Panagiotis Domvros)</td></tr>
-          <tr><td>14</td><td>Hungary</td><td>Tsigoias Konstantinos</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>15</td><td>Iceland</td><td>Sofos Aimilios</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>16</td><td>India</td><td>Andromachi Antoniou</td><td>Model Vocational High School of Epanomi</td><td>Kiriaki Koulia</td></tr>
-          <tr><td>17</td><td>Ireland</td><td>Panou Theofilos</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>18</td><td>Italy</td><td>Mario Moutaftsidis</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>19</td><td>Japan</td><td>Fotios Pastrikakis</td><td>American Farm School</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>20</td><td>Malta</td><td>Kousaridou Vasiliki-Foteini</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>21</td><td>Mexico</td><td>Datsis Vasilios</td><td>1st Middle School of Pylea</td><td>Anastasia Tsioumani, Paschalia Gkoutziamani, Thomas Gkoutziamanis</td></tr>
-          <tr><td>22</td><td>Nigeria</td><td>Vasileios Anastasios Konstantakis</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>23</td><td>North Korea</td><td>Nikolaos Lazaridis</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Foteini Skentzou, Theodora Kalliora</td></tr>
-          <tr><td>24</td><td>Norway</td><td>Tapakabaki Salomi</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr>
-          <tr><td>25</td><td>Poland</td><td>Vasileios Karampas</td><td>1st Senior High School of Pylea</td><td>Katerina Lymperi</td></tr>
-          <tr><td>26</td><td>Portugal</td><td>Vasiliki Nouri</td><td>Junior High School of Macrochori</td><td>Mina Koulouri</td></tr>
-          <tr><td>27</td><td>Qatar</td><td>Andrea Calja</td><td>3rd Junior High School of Thessaloniki</td><td>Kyriakopoulou Eirini</td></tr>
-          <tr><td>28</td><td>Romania</td><td>Misirlis Evaggelos</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara</td></tr>
-          <tr><td>29</td><td>Russia</td><td>Dimitroulakis Artemios</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>30</td><td>Saudi Arabia</td><td>Danikas Vasilis</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>31</td><td>South Africa</td><td>Rabina Dida</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>32</td><td>Sweden</td><td>Stamou Anastasia</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>33</td><td>Switzerland</td><td>Alicia Levene</td><td>3rd Junior High School of Kalamaria</td><td>Aikaterini Gkintziri</td></tr>
-          <tr><td>34</td><td>The Netherlands</td><td>Drosou Evangelia</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>35</td><td>USA</td><td>Diamantopoulos Ippokratis</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr>
-          <tr><td>36</td><td>Ukraine</td><td>Tompris-Papantoniou Ermis</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>37</td><td>United Arab Emirates</td><td>Anastasia Kakhniashvili</td><td>17th Senior High School of Thessaloniki</td><td>Efthymia Damtsi, Georgia Douramani</td></tr>
-          <tr><td>38</td><td>United Kingdom</td><td>Achilleas Kitidis</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>
-        </tbody>
-      </table>
+        <div class="committee-header">
+            <h3>Security Council (38)</h3>
+            <button class="print-btn" onclick="printCommittee('com-4')">Print to PDF</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Country</th>
+                    <th>Name of Delegate</th>
+                    <th>School of Origin</th>
+                    <th>Advisor(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr><td>1</td><td>Argentina</td><td>Aldrin Xhafa</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>2</td><td>Australia</td><td>Thomas Diamantidis</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>3</td><td>Austria</td><td>Theodorelou Aikaterini</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>4</td><td>Belarus</td><td>Kostopoulou Sylvestrou Olga</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>5</td><td>China</td><td>Sdralis Andreas</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>6</td><td>Czech Republic</td><td>Thomopoulou Artemis</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>7</td><td>Denmark</td><td>Achilleas Katsos</td><td>Anatolia College IB</td><td>Independent Delegate (Panagiotis Domvros)</td></tr><tr><td>8</td><td>Egypt</td><td>Avraam Kontopoulos</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr><tr><td>9</td><td>Estonia</td><td>Dimitroulakis Konstantinos</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>10</td><td>Finland</td><td>Moutropoulou Apostolia</td><td>6th Senior High School of Kalamaria</td><td>Angeliki Maria Economopoulou </td></tr><tr><td>11</td><td>France</td><td>Christoforidis Konstantinos</td><td>1st Middle School of Pylea</td><td>Fani Vasilikou, Lemonia Dimina, Panagiotis Domvros</td></tr><tr><td>12</td><td>Germany</td><td>Dimitra Zacharia</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>13</td><td>Greece</td><td>Thanos Mouzakis</td><td>3rd High School of Stavroupoli</td><td>Independent Delegate (Panagiotis Domvros)</td></tr><tr><td>14</td><td>Hungary</td><td>Tsigoias Konstantinos</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>15</td><td>Iceland</td><td>Sofos Aimilios</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>16</td><td>India</td><td>Andromachi Antoniou</td><td>Model Vocational High School of Epanomi</td><td>Evangelia Tsipropoulou </td></tr><tr><td>17</td><td>Ireland</td><td>Panou Theofilos</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>18</td><td>Italy</td><td>Mario Moutaftsidis</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>19</td><td>Japan</td><td>Fotios Pastrikakis</td><td>American Farm School</td><td>Dorothy Chrisohoidis (Senior High School) </td></tr><tr><td>20</td><td>Malta</td><td>Kousaridou Vasiliki-Foteini</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>21</td><td>Mexico</td><td>Datsis Vasilios</td><td>1st Middle School of Pylea</td><td>Fani Vasilikou, Lemonia Dimina, Panagiotis Domvros</td></tr><tr><td>22</td><td>Nigeria</td><td>Vasileios Anastasios Konstantakis</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>23</td><td>North Korea</td><td>Nikolaos Lazaridis</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Skentzou Foteini , Theodora Kalliora</td></tr><tr><td>24</td><td>Norway</td><td>Tapakabaki Salomi</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr><tr><td>25</td><td>Poland</td><td>Vasileios Karampas</td><td>1st Senior High School of Pylea</td><td>Foteini Papagermanou, Marina Moschovidou</td></tr><tr><td>26</td><td>Portugal</td><td>Vasiliki Nouri</td><td>Junior High School of Macrochori</td><td>Zarifi Vasoglou, Maria Apostolou</td></tr><tr><td>27</td><td>Qatar</td><td>Andrea Calja</td><td>3rd Junior High School of Thessaloniki</td><td>Vasiliki Michailidou</td></tr><tr><td>28</td><td>Romania</td><td>Misirlis Evaggelos</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara, Christina Bitsiou</td></tr><tr><td>29</td><td>Russia</td><td>Dimitroulakis Artemios</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>30</td><td>Saudi Arabia</td><td>Danikas Vasilis</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>31</td><td>South Africa</td><td>Rabina Dida</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>32</td><td>Sweden</td><td>Stamou Anastasia</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>33</td><td>Switzerland</td><td>Alicia Levene</td><td>3rd Junior High School of Kalamaria</td><td>Pougaridou Eleni</td></tr><tr><td>34</td><td>The Netherlands</td><td>Drosou Evangelia</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>35</td><td>USA</td><td>Diamantopoulos Ippokratis</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr><tr><td>36</td><td>Ukraine</td><td>Tompris-Papantoniou Ermis</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>37</td><td>United Arab Emirates</td><td>Anastasia Kakhniashvili</td><td>17th Senior High School of Thessaloniki</td><td>Efthymia Damtsi, Georgia Douramani</td></tr><tr><td>38</td><td>United Kingdom</td><td>Achilleas Kitidis</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>            </tbody>
+        </table>
     </div>
-
+    
     <div id="com-5" class="committee-section">
-      <div class="committee-header">
-        <h3>UN Environment Programme (34)</h3>
-        <button class="print-btn" onclick="printCommittee('com-5')">Print to PDF</button>
-      </div>
-      <table>
-        <thead><tr><th>#</th><th>Country</th><th>Name of Delegate</th><th>School of Origin</th><th>Advisor(s)</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Argentina</td><td>Sofia Papounidou</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>2</td><td>Armenia</td><td>Stylianos Gkoutsidis</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>3</td><td>Australia</td><td>Aikaterini - Maria Agrafioti</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>4</td><td>Austria</td><td>Exarchopoulou Theofani</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>5</td><td>Belarus</td><td>Koutroumbakis Dimitrios</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>6</td><td>China</td><td>Betsas Panagiotis</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>7</td><td>Croatia</td><td>Maria Margioula</td><td>27th Senior High School of Thessaloniki</td><td>Despoina Chatzoglou</td></tr>
-          <tr><td>8</td><td>Czech Republic</td><td>Vasileiou Ioannis</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>9</td><td>Egypt</td><td>Martha Ioannidou</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr>
-          <tr><td>10</td><td>Finland</td><td>Kontogeorgaki Dimitra</td><td>6th Senior High School of Kalamaria</td><td>Eleni Kalogianni</td></tr>
-          <tr><td>11</td><td>Germany</td><td>Ino Zolota</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>12</td><td>Greece</td><td>Dimitris Polyzois</td><td>1st Senior High School of Pylea</td><td>Katerina Lymperi</td></tr>
-          <tr><td>13</td><td>Hungary</td><td>Dragolia Kyriaki</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>14</td><td>Iceland</td><td>Balourdou Eirini</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>15</td><td>India</td><td>Kyriaki Nikiforidou</td><td>Model Vocational High School of Epanomi</td><td>Kiriaki Koulia</td></tr>
-          <tr><td>16</td><td>Ireland</td><td>Rompotis Evaggelos</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>17</td><td>Italy</td><td>Aikaterini Arampatzi</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>18</td><td>Latvia</td><td>Magoula Alkmini Georgia</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli</td></tr>
-          <tr><td>19</td><td>Malta</td><td>Daviti Anastasia</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>20</td><td>New Zealand</td><td>Alesia Biba</td><td>Junior High School of Macrochori</td><td>Mina Koulouri</td></tr>
-          <tr><td>21</td><td>Nigeria</td><td>Christina Angelakaki</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>22</td><td>North Korea</td><td>Ntavelis Panagiotis</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Foteini Skentzou, Theodora Kalliora</td></tr>
-          <tr><td>23</td><td>Norway</td><td>Lagouris Eystratios</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr>
-          <tr><td>24</td><td>Portugal</td><td>Kyriakos Kromlidis</td><td>Junior High School of Macrochori</td><td>Mina Koulouri</td></tr>
-          <tr><td>25</td><td>Qatar</td><td>Bayan Nofal</td><td>3rd Junior High School of Thessaloniki</td><td>Kyriakopoulou Eirini</td></tr>
-          <tr><td>26</td><td>Romania</td><td>Demseri Margarita</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara</td></tr>
-          <tr><td>27</td><td>Russia</td><td>Chanou Kalliopi Maria</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>28</td><td>Saudi Arabia</td><td>Despotopoulos Apollonas</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>29</td><td>South Africa</td><td>Konstantina Koukouliata</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>30</td><td>Sweden</td><td>Barbalia Domniki</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>31</td><td>Switzerland</td><td>Despoina Koura</td><td>3rd Junior High School of Kalamaria</td><td>Aikaterini Gkintziri</td></tr>
-          <tr><td>32</td><td>The Netherlands</td><td>Valsamidi Christina</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>33</td><td>USA</td><td>Kappa Maria-Styliani</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr>
-          <tr><td>34</td><td>Ukraine</td><td>Papaioannou Paschalia</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>35</td><td>United Kingdom</td><td>Vasiliki Katsapouridou</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>
-        </tbody>
-      </table>
+        <div class="committee-header">
+            <h3>UN Environment Programme (35)</h3>
+            <button class="print-btn" onclick="printCommittee('com-5')">Print to PDF</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Country</th>
+                    <th>Name of Delegate</th>
+                    <th>School of Origin</th>
+                    <th>Advisor(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr><td>1</td><td>Argentina</td><td>Sofia Papounidou</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>2</td><td>Armenia</td><td>Stylianos Gkoutsidis</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>3</td><td>Australia</td><td>Aikaterini - Maria Agrafioti</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>4</td><td>Austria</td><td>Exarchopoulou Theofani</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>5</td><td>Belarus</td><td>Koutroumbakis Dimitrios</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>6</td><td>China</td><td>Betsas Panagiotis</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>7</td><td>Croatia</td><td>Maria Margioula</td><td>27th Senior High School of Thessaloniki</td><td>Maria Kargopoulou, Sevi Labropoulou</td></tr><tr><td>8</td><td>Czech Republic</td><td>Vasileiou Ioannis</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>9</td><td>Egypt</td><td>Martha Ioannidou</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr><tr><td>10</td><td>Finland</td><td>Kontogeorgaki Dimitra</td><td>6th Senior High School of Kalamaria</td><td>Angeliki Maria Economopoulou </td></tr><tr><td>11</td><td>Germany</td><td>Ino Zolota</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>12</td><td>Greece</td><td>Dimitris Polyzois</td><td>1st Senior High School of Pylea</td><td>Foteini Papagermanou, Marina Moschovidou</td></tr><tr><td>13</td><td>Hungary</td><td>Dragolia Kyriaki</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>14</td><td>Iceland</td><td>Balourdou Eirini</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>15</td><td>India</td><td>Kyriaki Nikiforidou</td><td>Model Vocational High School of Epanomi</td><td>Evangelia Tsipropoulou </td></tr><tr><td>16</td><td>Ireland</td><td>Rompotis Evaggelos</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>17</td><td>Italy</td><td>Aikaterini Arampatzi</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>18</td><td>Latvia</td><td>Magoula Alkmini Georgia</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli </td></tr><tr><td>19</td><td>Malta</td><td>Daviti Anastasia</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>20</td><td>New Zealand</td><td>Alesia Biba</td><td>Junior High School of Macrochori</td><td>Zarifi Vasoglou, Maria Apostolou</td></tr><tr><td>21</td><td>Nigeria</td><td>Christina Angelakaki</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>22</td><td>North Korea</td><td>Ntavelis Panagiotis</td><td>Anaxagorio Senior High School of Nea Erythraia</td><td>Skentzou Foteini , Theodora Kalliora</td></tr><tr><td>23</td><td>Norway</td><td>Lagouris Eystratios</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr><tr><td>24</td><td>Portugal</td><td>Kyriakos Kromlidis</td><td>Junior High School of Macrochori</td><td>Zarifi Vasoglou, Maria Apostolou</td></tr><tr><td>25</td><td>Qatar</td><td>Bayan Nofal</td><td>3rd Junior High School of Thessaloniki</td><td>Vasiliki Michailidou</td></tr><tr><td>26</td><td>Romania</td><td>Demseri Margarita</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara, Christina Bitsiou</td></tr><tr><td>27</td><td>Russia</td><td>Chanou Kalliopi Maria</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>28</td><td>Saudi Arabia</td><td>Despotopoulos Apollonas</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>29</td><td>South Africa</td><td>Konstantina Koukouliata</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>30</td><td>Sweden</td><td>Barbalia Domniki</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>31</td><td>Switzerland</td><td>Despoina Koura</td><td>3rd Junior High School of Kalamaria</td><td>Pougaridou Eleni</td></tr><tr><td>32</td><td>The Netherlands</td><td>Valsamidi Christina</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>33</td><td>USA</td><td>Kappa Maria-Styliani</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr><tr><td>34</td><td>Ukraine</td><td>Papaioannou Paschalia</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>35</td><td>United Kingdom</td><td>Vasiliki Katsapouridou</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>            </tbody>
+        </table>
     </div>
-
+    
     <div id="com-6" class="committee-section">
-      <div class="committee-header">
-        <h3>UN Women (35)</h3>
-        <button class="print-btn" onclick="printCommittee('com-6')">Print to PDF</button>
-      </div>
-      <table>
-        <thead><tr><th>#</th><th>Country</th><th>Name of Delegate</th><th>School of Origin</th><th>Advisor(s)</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Argentina</td><td>Konstandina Tafa</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>2</td><td>Armenia</td><td>Tsapatoli Lemonia Michaela</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>3</td><td>Australia</td><td>Stefania Papadopoulou</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>4</td><td>Austria</td><td>Loumiti Maria</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>5</td><td>Belarus</td><td>Tourpali Athanassia</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>6</td><td>China</td><td>Tsatsari Kiara</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>7</td><td>Croatia</td><td>Aspasia Paschaloudi</td><td>27th Senior High School of Thessaloniki</td><td>Despoina Chatzoglou</td></tr>
-          <tr><td>8</td><td>Czech Republic</td><td>Thomopoulou Anastasia</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>9</td><td>Egypt</td><td>Izampella Ntantami</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr>
-          <tr><td>10</td><td>Estonia</td><td>Akrivou Efthimia</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>11</td><td>Finland</td><td>Pagoni Ioanna Roumpini</td><td>6th Senior High School of Kalamaria</td><td>Eleni Kalogianni</td></tr>
-          <tr><td>12</td><td>France</td><td>Verga Ioanna</td><td>1st Middle School of Pylea</td><td>Anastasia Tsioumani, Paschalia Gkoutziamani, Thomas Gkoutziamanis</td></tr>
-          <tr><td>13</td><td>Germany</td><td>Andriana Sountoulidou</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>14</td><td>Greece</td><td>Sophia Xanthopoulou</td><td>St. Paul Private School</td><td>Independent Delegate (Panagiotis Domvros)</td></tr>
-          <tr><td>15</td><td>Hungary</td><td>Dogkosi Pandora</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>16</td><td>Iceland</td><td>Papagerorgiou Zoi</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>17</td><td>India</td><td>Makridou Sulatana-Anna</td><td>Model Vocational High School of Epanomi</td><td>Kiriaki Koulia</td></tr>
-          <tr><td>18</td><td>Ireland</td><td>Rachmanidi Nefeli</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>19</td><td>Italy</td><td>Ioanna Zazopoulou</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>20</td><td>Japan</td><td>Eleni Giagtzoglou</td><td>American Farm School</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>21</td><td>Latvia</td><td>David Marilia</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli</td></tr>
-          <tr><td>22</td><td>Malta</td><td>Drouza Olga-Anna</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>23</td><td>New Zealand</td><td>Penelope Sympetheri</td><td>Junior High School of Macrochori</td><td>Mina Koulouri</td></tr>
-          <tr><td>24</td><td>Nigeria</td><td>Gabriela Dida</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>25</td><td>Norway</td><td>Kioupeli Theano</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr>
-          <tr><td>26</td><td>Qatar</td><td>Nini Gelashvili</td><td>3rd Junior High School of Thessaloniki</td><td>Kyriakopoulou Eirini</td></tr>
-          <tr><td>27</td><td>Romania</td><td>Giannakopoulou Xanthipi</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara</td></tr>
-          <tr><td>28</td><td>Saudi Arabia</td><td>Tsilivigou Alice</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>29</td><td>Sweden</td><td>Dimitriou Margarita</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>30</td><td>Switzerland</td><td>Anastasia Stamna</td><td>3rd Junior High School of Kalamaria</td><td>Aikaterini Gkintziri</td></tr>
-          <tr><td>31</td><td>The Netherlands</td><td>Vasilakou Sophia</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>32</td><td>USA</td><td>Gidarakou Eleni Myrto</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr>
-          <tr><td>33</td><td>Ukraine</td><td>Lampidou Christina</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>34</td><td>United Kingdom</td><td>Dimitris Dimitrov</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>
-          <tr><td>35</td><td>Venezuela</td><td>Elpida Vaka</td><td>American Farm School</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-        </tbody>
-      </table>
+        <div class="committee-header">
+            <h3>UN Women (34)</h3>
+            <button class="print-btn" onclick="printCommittee('com-6')">Print to PDF</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Country</th>
+                    <th>Name of Delegate</th>
+                    <th>School of Origin</th>
+                    <th>Advisor(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr><td>1</td><td>Argentina</td><td>Konstandina Tafa</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>2</td><td>Armenia</td><td>Tsapatoli Lemonia Michaela</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>3</td><td>Australia</td><td>Stefania Papadopoulou</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>4</td><td>Austria</td><td>Loumiti Maria</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>5</td><td>Belarus</td><td>Tourpali Athanassia</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>6</td><td>China</td><td>Tsatsari Kiara</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>7</td><td>Croatia</td><td>Aspasia Paschaloudi</td><td>27th Senior High School of Thessaloniki</td><td>Maria Kargopoulou, Sevi Labropoulou</td></tr><tr><td>8</td><td>Czech Republic</td><td>Thomopoulou Anastasia</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>9</td><td>Egypt</td><td>Izampella Ntantami</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr><tr><td>10</td><td>Estonia</td><td>Akrivou Efthimia</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>11</td><td>Finland</td><td>Pagoni Ioanna Roumpini</td><td>6th Senior High School of Kalamaria</td><td>Angeliki Maria Economopoulou </td></tr><tr><td>12</td><td>France</td><td>Verga Ioanna</td><td>1st Middle School of Pylea</td><td>Fani Vasilikou, Lemonia Dimina, Panagiotis Domvros</td></tr><tr><td>13</td><td>Germany</td><td>Andriana Sountoulidou</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>14</td><td>Hungary</td><td>Dogkosi Pandora</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>15</td><td>Iceland</td><td>Papagerorgiou Zoi</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>16</td><td>India</td><td>Makridou Sulatana-Anna</td><td>Model Vocational High School of Epanomi</td><td>Evangelia Tsipropoulou </td></tr><tr><td>17</td><td>Ireland</td><td>Rachmanidi Nefeli</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>18</td><td>Italy</td><td>Ioanna Zazopoulou</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>19</td><td>Japan</td><td>Eleni Giagtzoglou</td><td>American Farm School</td><td>Dorothy Chrisohoidis (Senior High School) </td></tr><tr><td>20</td><td>Latvia</td><td>David Marilia</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli </td></tr><tr><td>21</td><td>Malta</td><td>Drouza Olga-Anna</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>22</td><td>New Zealand</td><td>Penelope Sympetheri</td><td>Junior High School of Macrochori</td><td>Zarifi Vasoglou, Maria Apostolou</td></tr><tr><td>23</td><td>Nigeria</td><td>Gabriela Dida</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>24</td><td>Norway</td><td>Kioupeli Theano</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr><tr><td>25</td><td>Qatar</td><td>Nini Gelashvili</td><td>3rd Junior High School of Thessaloniki</td><td>Vasiliki Michailidou</td></tr><tr><td>26</td><td>Romania</td><td>Giannakopoulou Xanthipi</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara, Christina Bitsiou</td></tr><tr><td>27</td><td>Saudi Arabia</td><td>Tsilivigou Alice</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>28</td><td>Sweden</td><td>Dimitriou Margarita</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>29</td><td>Switzerland</td><td>Anastasia Stamna</td><td>3rd Junior High School of Kalamaria</td><td>Pougaridou Eleni</td></tr><tr><td>30</td><td>The Netherlands</td><td>Vasilakou Sophia</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>31</td><td>USA</td><td>Gidarakou Eleni Myrto</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr><tr><td>32</td><td>Ukraine</td><td>Lampidou Christina</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>33</td><td>United Kingdom</td><td>Dimitris Dimitrov</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr><tr><td>34</td><td>Venezuela</td><td>Elpida Vaka</td><td>American Farm School</td><td>Dorothy Chrisohoidis (Senior High School) </td></tr>            </tbody>
+        </table>
     </div>
-
+    
     <div id="com-7" class="committee-section">
-      <div class="committee-header">
-        <h3>UNESCO (31)</h3>
-        <button class="print-btn" onclick="printCommittee('com-7')">Print to PDF</button>
-      </div>
-      <table>
-        <thead><tr><th>#</th><th>Country</th><th>Name of Delegate</th><th>School of Origin</th><th>Advisor(s)</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Argentina</td><td>Michail Moschakos</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>2</td><td>Australia</td><td>Miranda Georgiou</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>3</td><td>Austria</td><td>Thanopoulou Aikaterini Maria</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>4</td><td>Belarus</td><td>Chatzikamaris Marios</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>5</td><td>China</td><td>Bautista Gedtrej</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>6</td><td>Croatia</td><td>Chrysoula Savvidou</td><td>27th Senior High School of Thessaloniki</td><td>Despoina Chatzoglou</td></tr>
-          <tr><td>7</td><td>Czech Republic</td><td>Dimitroulopoulou Dimitra - Myrina</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>8</td><td>Egypt</td><td>Michaelidis Dimitrios</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr>
-          <tr><td>9</td><td>Finland</td><td>Vasila Elena</td><td>6th Senior High School of Kalamaria</td><td>Eleni Kalogianni</td></tr>
-          <tr><td>10</td><td>Germany</td><td>Panagiota Polymenakou</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>11</td><td>Iceland</td><td>Kladias Isidoros</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>12</td><td>India</td><td>Angelos Ioannidis</td><td>Model Vocational High School of Epanomi</td><td>Kiriaki Koulia</td></tr>
-          <tr><td>13</td><td>Ireland</td><td>Talaverou Vasiliki</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>14</td><td>Italy</td><td>Myrto Panagiotidou</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>15</td><td>Japan</td><td>Maria Zacharo Dalla</td><td>American Farm School</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>16</td><td>Latvia</td><td>Grizi Apollonia Eirini</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli</td></tr>
-          <tr><td>17</td><td>Malta</td><td>Sotiriadis Charalampos</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>18</td><td>Norway</td><td>Fortouni Fyntanidou Georgia</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr>
-          <tr><td>19</td><td>Poland</td><td>Grigorios Tsirimpatselis</td><td>1st Senior High School of Pylea</td><td>Katerina Lymperi</td></tr>
-          <tr><td>20</td><td>Portugal</td><td>Efthimia Valavani</td><td>Junior High School of Macrochori</td><td>Mina Koulouri</td></tr>
-          <tr><td>21</td><td>Qatar</td><td>Despoina Kotsaridou</td><td>3rd Junior High School of Thessaloniki</td><td>Kyriakopoulou Eirini</td></tr>
-          <tr><td>22</td><td>Romania</td><td>Renta Theodosia</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara</td></tr>
-          <tr><td>23</td><td>Russia</td><td>Mastorogiannis Georgios</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>24</td><td>Saudi Arabia</td><td>Patras Dimitris</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>25</td><td>South Africa</td><td>Soumela Chatzikou</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>26</td><td>Sweden</td><td>Mavidou Valeria</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>27</td><td>Switzerland</td><td>Irene Kyriakidou</td><td>3rd Junior High School of Kalamaria</td><td>Aikaterini Gkintziri</td></tr>
-          <tr><td>28</td><td>The Netherlands</td><td>Dimou Dimitra</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>29</td><td>USA</td><td>Zoumpliou Foteini</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr>
-          <tr><td>30</td><td>Ukraine</td><td>Salpingidou Maria-Ioanna</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>31</td><td>United Arab Emirates</td><td>Angelos Anastasiadis</td><td>17th Senior High School of Thessaloniki</td><td>Efthymia Damtsi, Georgia Douramani</td></tr>
-          <tr><td>32</td><td>United Kingdom</td><td>Lefteris Katramados Anagnostakis</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>
-        </tbody>
-      </table>
+        <div class="committee-header">
+            <h3>UNESCO (32)</h3>
+            <button class="print-btn" onclick="printCommittee('com-7')">Print to PDF</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Country</th>
+                    <th>Name of Delegate</th>
+                    <th>School of Origin</th>
+                    <th>Advisor(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr><td>1</td><td>Argentina</td><td>Michail Moschakos</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>2</td><td>Australia</td><td>Miranda Georgiou</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>3</td><td>Austria</td><td>Thanopoulou Aikaterini Maria</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>4</td><td>Belarus</td><td>Chatzikamaris Marios</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>5</td><td>China</td><td>Bautista Gedtrej</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>6</td><td>Croatia</td><td>Chrysoula Savvidou</td><td>27th Senior High School of Thessaloniki</td><td>Maria Kargopoulou, Sevi Labropoulou</td></tr><tr><td>7</td><td>Czech Republic</td><td>Dimitroulopoulou Dimitra - Myrina</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>8</td><td>Egypt</td><td>Michaelidis Dimitrios</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr><tr><td>9</td><td>Finland</td><td>Vasila Elena</td><td>6th Senior High School of Kalamaria</td><td>Angeliki Maria Economopoulou </td></tr><tr><td>10</td><td>Germany</td><td>Panagiota Polymenakou</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>11</td><td>Iceland</td><td>Kladias Isidoros</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>12</td><td>India</td><td>Angelos Ioannidis</td><td>Model Vocational High School of Epanomi</td><td>Evangelia Tsipropoulou </td></tr><tr><td>13</td><td>Ireland</td><td>Talaverou Vasiliki</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>14</td><td>Italy</td><td>Myrto Panagiotidou</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>15</td><td>Japan</td><td>Maria Zacharo Dalla</td><td>American Farm School</td><td>Dorothy Chrisohoidis (Senior High School) </td></tr><tr><td>16</td><td>Latvia</td><td>Grizi Apollonia Eirini</td><td>2nd Middle School of Melissia</td><td>Charikleia Nifli </td></tr><tr><td>17</td><td>Malta</td><td>Sotiriadis Charalampos</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>18</td><td>Norway</td><td>Fortouni Fyntanidou Georgia</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr><tr><td>19</td><td>Poland</td><td>Grigorios Tsirimpatselis</td><td>1st Senior High School of Pylea</td><td>Foteini Papagermanou, Marina Moschovidou</td></tr><tr><td>20</td><td>Portugal</td><td>Efthimia Valavani</td><td>Junior High School of Macrochori</td><td>Zarifi Vasoglou, Maria Apostolou</td></tr><tr><td>21</td><td>Qatar</td><td>Despoina Kotsaridou</td><td>3rd Junior High School of Thessaloniki</td><td>Vasiliki Michailidou</td></tr><tr><td>22</td><td>Romania</td><td>Renta Theodosia</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara, Christina Bitsiou</td></tr><tr><td>23</td><td>Russia</td><td>Mastorogiannis Georgios</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>24</td><td>Saudi Arabia</td><td>Patras Dimitris</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>25</td><td>South Africa</td><td>Soumela Chatzikou</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>26</td><td>Sweden</td><td>Mavidou Valeria</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>27</td><td>Switzerland</td><td>Irene Kyriakidou</td><td>3rd Junior High School of Kalamaria</td><td>Pougaridou Eleni</td></tr><tr><td>28</td><td>The Netherlands</td><td>Dimou Dimitra</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>29</td><td>USA</td><td>Zoumpliou Foteini</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr><tr><td>30</td><td>Ukraine</td><td>Salpingidou Maria-Ioanna</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>31</td><td>United Arab Emirates</td><td>Angelos Anastasiadis</td><td>17th Senior High School of Thessaloniki</td><td>Efthymia Damtsi, Georgia Douramani</td></tr><tr><td>32</td><td>United Kingdom</td><td>Lefteris Katramados Anagnostakis</td><td>1st Senior High School of Evosmos</td><td>Maria Goridari, Paschalidou Martha</td></tr>            </tbody>
+        </table>
     </div>
-
+    
     <div id="com-8" class="committee-section">
-      <div class="committee-header">
-        <h3>World Health Organisation (34)</h3>
-        <button class="print-btn" onclick="printCommittee('com-8')">Print to PDF</button>
-      </div>
-      <table>
-        <thead><tr><th>#</th><th>Country</th><th>Name of Delegate</th><th>School of Origin</th><th>Advisor(s)</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Argentina</td><td>Eleftheria Gkaletsi</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>2</td><td>Armenia</td><td>Lazaridis Vasileios</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>3</td><td>Australia</td><td>Vasileia Chatzipanagiotidou</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>4</td><td>Austria</td><td>Tzavara Anastasia Stefania</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>5</td><td>Belarus</td><td>Tzola Evangelia</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>6</td><td>China</td><td>Georgala Melina</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>7</td><td>Croatia</td><td>David Mamuladze</td><td>27th Senior High School of Thessaloniki</td><td>Despoina Chatzoglou</td></tr>
-          <tr><td>8</td><td>Czech Republic</td><td>Diamantopoulou Maria Emmeleia</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou, Lamprini Panti</td></tr>
-          <tr><td>9</td><td>Egypt</td><td>Antonia Kopterou</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr>
-          <tr><td>10</td><td>Finland</td><td>Kosmidou Paraskevi</td><td>6th Senior High School of Kalamaria</td><td>Eleni Kalogianni</td></tr>
-          <tr><td>11</td><td>France</td><td>Pavlidis-Charalambidis Alexandros</td><td>1st Middle School of Pylea</td><td>Anastasia Tsioumani, Paschalia Gkoutziamani, Thomas Gkoutziamanis</td></tr>
-          <tr><td>12</td><td>Germany</td><td>Alexandra Charalampidou</td><td>American Farm School of Thessaloniki</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>13</td><td>Greece</td><td>Eleftheria Sotireli</td><td>General High School of Limena Thassos</td><td>Independent Delegate (Panagiotis Domvros)</td></tr>
-          <tr><td>14</td><td>Hungary</td><td>Georgakaki Nikoletta</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>15</td><td>Iceland</td><td>Mouselimis Ikaros</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>16</td><td>India</td><td>Evangelia Giannoudi</td><td>Model Vocational High School of Epanomi</td><td>Kiriaki Koulia</td></tr>
-          <tr><td>17</td><td>Ireland</td><td>Vossou Aikaterini</td><td>Ionideios Model Junior High School</td><td>Maria Grammata</td></tr>
-          <tr><td>18</td><td>Italy</td><td>Angeliki Piperidou</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despina Avgerinou</td></tr>
-          <tr><td>19</td><td>Japan</td><td>Michael Tzimas</td><td>American Farm School</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-          <tr><td>20</td><td>Malta</td><td>Tsianaka Athina</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou</td></tr>
-          <tr><td>21</td><td>Norway</td><td>Theochari Eleni Maria</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr>
-          <tr><td>22</td><td>Poland</td><td>Evangelia-Evanthia Samara</td><td>1st Senior High School of Pylea</td><td>Katerina Lymperi</td></tr>
-          <tr><td>23</td><td>Portugal</td><td>Rafail-Minas Sygkas</td><td>Junior High School of Macrochori</td><td>Mina Koulouri</td></tr>
-          <tr><td>24</td><td>Qatar</td><td>Stelina Alatzoglou</td><td>3rd Junior High School of Thessaloniki</td><td>Kyriakopoulou Eirini</td></tr>
-          <tr><td>25</td><td>Romania</td><td>Sidiropoulou Dimitra</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara</td></tr>
-          <tr><td>26</td><td>Russia</td><td>Taki Anna</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr>
-          <tr><td>27</td><td>Saudi Arabia</td><td>Papanikolaou Elias</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Aristea Lekka</td></tr>
-          <tr><td>28</td><td>South Africa</td><td>Eleftheria Tsiapou</td><td>20th Senior High School of Thessaloniki</td><td>Athanasia Voulgari</td></tr>
-          <tr><td>29</td><td>Sweden</td><td>Poursanidou Aikaterini</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>30</td><td>Switzerland</td><td>Maria Ioakeimidou</td><td>3rd Junior High School of Kalamaria</td><td>Aikaterini Gkintziri</td></tr>
-          <tr><td>31</td><td>The Netherlands</td><td>Kofidou Anastasia</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr>
-          <tr><td>32</td><td>USA</td><td>Gidarakos Dimitrios Marios</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr>
-          <tr><td>33</td><td>Ukraine</td><td>Tsiotra Efthalia-Zoi</td><td>7th Senior High School of Kalamaria</td><td>Anatoli Vrocharidou</td></tr>
-          <tr><td>34</td><td>United Arab Emirates</td><td>Maria Katsamouri</td><td>17th Senior High School of Thessaloniki</td><td>Efthymia Damtsi, Georgia Douramani</td></tr>
-          <tr><td>35</td><td>Venezuela</td><td>Christina Sidiropoulou</td><td>American Farm School</td><td>Athena Nikiforidou, Dimitra Zacharia</td></tr>
-        </tbody>
-      </table>
+        <div class="committee-header">
+            <h3>World Health Organisation (35)</h3>
+            <button class="print-btn" onclick="printCommittee('com-8')">Print to PDF</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Country</th>
+                    <th>Name of Delegate</th>
+                    <th>School of Origin</th>
+                    <th>Advisor(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr><td>1</td><td>Argentina</td><td>Eleftheria Gkaletsi</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>2</td><td>Armenia</td><td>Lazaridis Vasileios</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>3</td><td>Australia</td><td>Vasileia Chatzipanagiotidou</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>4</td><td>Austria</td><td>Tzavara Anastasia Stefania</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>5</td><td>Belarus</td><td>Tzola Evangelia</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>6</td><td>China</td><td>Georgala Melina</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>7</td><td>Croatia</td><td>David Mamuladze</td><td>27th Senior High School of Thessaloniki</td><td>Maria Kargopoulou, Sevi Labropoulou</td></tr><tr><td>8</td><td>Czech Republic</td><td>Diamantopoulou Maria Emmeleia</td><td>1st Junior High School of Pyrgos</td><td>Eleni Athanasopoulou , Lamprini Panti</td></tr><tr><td>9</td><td>Egypt</td><td>Antonia Kopterou</td><td>2nd Senior High School of Thermaikos</td><td>Stampouli Venetia, Vafkari Mararita</td></tr><tr><td>10</td><td>Finland</td><td>Kosmidou Paraskevi</td><td>6th Senior High School of Kalamaria</td><td>Angeliki Maria Economopoulou </td></tr><tr><td>11</td><td>France</td><td>Pavlidis-Charalambidis Alexandros</td><td>1st Middle School of Pylea</td><td>Fani Vasilikou, Lemonia Dimina, Panagiotis Domvros</td></tr><tr><td>12</td><td>Germany</td><td>Alexandra Charalampidou</td><td>American Farm School of Thessaloniki</td><td>Nikiforidou Athena  (Junior High School)</td></tr><tr><td>13</td><td>Greece</td><td>Eleftheria Sotireli</td><td>General High School of Limena Thassos</td><td>Independent Delegate (Panagiotis Domvros)</td></tr><tr><td>14</td><td>Hungary</td><td>Georgakaki Nikoletta</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>15</td><td>Iceland</td><td>Mouselimis Ikaros</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>16</td><td>India</td><td>Evangelia Giannoudi</td><td>Model Vocational High School of Epanomi</td><td>Evangelia Tsipropoulou </td></tr><tr><td>17</td><td>Ireland</td><td>Vossou Aikaterini</td><td>Ionideios Model Junior High School</td><td>Anastasia Paraskevoulakou, Archontaki Athanasia, Maria Grammata </td></tr><tr><td>18</td><td>Italy</td><td>Angeliki Piperidou</td><td>Onassio State Senior High School of Thessaloniki - Periklis Stefanidis</td><td>Despoina Avgerinou</td></tr><tr><td>19</td><td>Japan</td><td>Michael Tzimas</td><td>American Farm School</td><td>Dorothy Chrisohoidis (Senior High School) </td></tr><tr><td>20</td><td>Malta</td><td>Tsianaka Athina</td><td>2nd Senior High School of Thermi - Giorgos Ioannou</td><td>Ifigenia Kofou , Maria Paschalina Baxevanis </td></tr><tr><td>21</td><td>Norway</td><td>Theochari Eleni Maria</td><td>Aristotelio College</td><td>Elena Papadopoulou, Styliani Panopoulou</td></tr><tr><td>22</td><td>Poland</td><td>Evangelia-Evanthia Samara</td><td>1st Senior High School of Pylea</td><td>Foteini Papagermanou, Marina Moschovidou</td></tr><tr><td>23</td><td>Portugal</td><td>Rafail-Minas Sygkas</td><td>Junior High School of Macrochori</td><td>Zarifi Vasoglou, Maria Apostolou</td></tr><tr><td>24</td><td>Qatar</td><td>Stelina Alatzoglou</td><td>3rd Junior High School of Thessaloniki</td><td>Vasiliki Michailidou</td></tr><tr><td>25</td><td>Romania</td><td>Sidiropoulou Dimitra</td><td>2nd Senior High School of Pylea</td><td>Dimitra Kamara, Christina Bitsiou</td></tr><tr><td>26</td><td>Russia</td><td>Taki Anna</td><td>Experimental School of The University of Thessaloniki</td><td>Kiriakoula Maliara</td></tr><tr><td>27</td><td>Saudi Arabia</td><td>Papanikolaou Elias</td><td>1st Middle School of Kifisia</td><td>Anastasia Mangana, Anastasia Michaloutsou, Aristea Lekka</td></tr><tr><td>28</td><td>South Africa</td><td>Eleftheria Tsiapou</td><td>20th Senior High School of Thessaloniki</td><td>Athena Valla </td></tr><tr><td>29</td><td>Sweden</td><td>Poursanidou Aikaterini</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>30</td><td>Switzerland</td><td>Maria Ioakeimidou</td><td>3rd Junior High School of Kalamaria</td><td>Pougaridou Eleni</td></tr><tr><td>31</td><td>The Netherlands</td><td>Kofidou Anastasia</td><td>1st Model Junior High School of Thessaloniki</td><td>Aspasia Karasouli</td></tr><tr><td>32</td><td>USA</td><td>Gidarakos Dimitrios Marios</td><td>1st Senior High School of Panorama</td><td>Sofia Zerva, Viktoria Kosmidou</td></tr><tr><td>33</td><td>Ukraine</td><td>Tsiotra Efthalia-Zoi</td><td>7th Senior High School of Kalamaria</td><td>Afroditi Ioannidou</td></tr><tr><td>34</td><td>United Arab Emirates</td><td>Maria Katsamouri</td><td>17th Senior High School of Thessaloniki</td><td>Efthymia Damtsi, Georgia Douramani</td></tr><tr><td>35</td><td>Venezuela</td><td>Christina Sidiropoulou</td><td>American Farm School</td><td>Dorothy Chrisohoidis (Senior High School) </td></tr>            </tbody>
+        </table>
     </div>
 
-  </div>
-
-  <div class="footer">
+</div>
+<div class="footer">
     Devised by Panagiotis Domvros, Principal of 1st Middle School of Pylea & PyleaMUN President
-  </div>
-
+</div>
 </body>
 </html>
